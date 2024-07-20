@@ -3,12 +3,14 @@ import math
 from torch.utils.data import Dataset, DataLoader, random_split
 from datasets import load_dataset
 from utils import *
+from transformers import AutoTokenizer, AutoModelForTextEncoding
 
 # latex_data_id = 'OleehyO/latex-formulas'
 imagenet_id = "visual-layer/imagenet-1k-vl-enriched"
 train_split = 0.9
 batch_size = 32
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+tokenizer = AutoTokenizer.from_pretrained(config.text_encoder_id)
 
 # load dataset from huggingface
 dataset = load_dataset(imagenet_id, split="train")
@@ -24,7 +26,7 @@ idtext, textid = create_vocabulary(captions)
 
 
 class CaptionDataset(Dataset):
-    def __init__(self, images, captions):
+    def __init__(self, images, captions, tokenizer):
         super().__init__()
         self.captions = captions
         self.images = images
