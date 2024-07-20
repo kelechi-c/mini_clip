@@ -9,3 +9,5 @@ class config:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     text_encoder_id = "distilbert-base-uncased"
     img_size = 200
+    dropout = 0.1
+    max_len = 100
