@@ -10,4 +10,5 @@ class config:
     text_encoder_id = "distilbert-base-uncased"
     img_size = 200
     dropout = 0.1
-    max_len = 100
+    max_len = 75
+    epochs = 100

@@ -9,7 +9,6 @@ from config import config
 # latex_data_id = 'OleehyO/latex-formulas'
 imagenet_id = "visual-layer/imagenet-1k-vl-enriched"
 train_split = 0.9
-batch_size = 32
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 tokenizer = AutoTokenizer.from_pretrained(config.text_encoder_id)
@@ -54,5 +53,8 @@ val_size = len(caption_dataset) - train_size
 
 train_data, valid_data = random_split(caption_dataset, (train_size, val_size))
 
-train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
-valid_loader = DataLoader(valid_data, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(
+    train_data, batch_size=config.batch_size, shuffle=True)
+
+valid_loader = DataLoader(
+    valid_data, batch_size=config.batch_size, shuffle=False)
