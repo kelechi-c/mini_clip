@@ -1,6 +1,8 @@
+from nltk import text
 import torch
 import timm
 from torch import nn
+from torch.nn import functional as func_nn
 from config import config
 from transformers import BertModel
 
@@ -82,3 +84,14 @@ class ClipModel(nn.Module):
         text_embed = self.text_projection(text_tokens)
 
         return img_embed, text_embed
+
+
+def get_similarities(
+    img_embed: torch.Tensor, text_embed: torch.Tensor, temp=config.temperature
+):
+    img_similarity = img_embed @ img_embed.T
+    text_similarity = text_embed @ text_embed.T
+
+    targets = func_nn.softmax((img_similarity, text_similarity) / (2 * temp))
+
+    return targets
