@@ -63,3 +63,22 @@ class ProjectLayer(nn.Module):  # projection head
         x = self.layer_norm(x)  # apply layer normalization
 
         return x
+
+
+class ClipModel(nn.Module):
+    def __init__(self, config=config):
+        super().__init__()
+        self.image_encoder = ImageEncoder()
+        self.text_encoder = TextEncoder(config)
+        self.image_projection = ProjectLayer(embed_dim=2048)
+        self.text_projection = ProjectLayer(embed_dim=768)
+        self.temp = config.temperature
+
+    def forward(self, image, text):
+        img_features = self.image_encoder(image)
+        text_tokens = self.text_encoder(text)
+
+        img_embed = self.image_projection(img_features)
+        text_embed = self.text_projection(text_tokens)
+
+        return img_embed, text_embed
